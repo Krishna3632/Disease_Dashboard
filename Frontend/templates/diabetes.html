@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Diabetes Prediction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-gray-900 text-gray-200 font-roboto">
+    <div class="min-h-screen flex flex-col">
+        <!-- Navbar -->
+        <nav class="bg-gray-800 p-4">
+            <div class="container mx-auto flex justify-between items-center">
+                <div class="text-2xl font-bold text-white">
+                    Diabetes Prediction
+                </div>
+                <div class="space-x-4">
+                    <a class="hover:underline" href="/">
+                        Home
+                    </a>
+                    <a class="hover:underline" href="#">
+                        About
+                    </a>
+                    <a class="hover:underline" href="#">
+                        Contact
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!-- Main Content -->
+        <div class="container mx-auto flex-1 p-6">
+            <div class="max-w-md mx-auto bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4 text-white">Diabetes Prediction Form</h2>
+                <form id="diabetesForm">
+                    <div class="mb-4">
+                        <label for="age" class="block text-gray-400 font-medium mb-2">Age</label>
+                        <input type="number" id="age" class="w-full px-3 py-2 border border-gray-600 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="glucose" class="block text-gray-400 font-medium mb-2">Glucose Level</label>
+                        <input type="number" id="glucose" class="w-full px-3 py-2 border border-gray-600 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="blood_pressure" class="block text-gray-400 font-medium mb-2">Blood Pressure</label>
+                        <input type="number" id="blood_pressure" class="w-full px-3 py-2 border border-gray-600 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="bmi" class="block text-gray-400 font-medium mb-2">Body Mass Index (BMI)</label>
+                        <input type="number" id="bmi" class="w-full px-3 py-2 border border-gray-600 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="mb-4">
+                        <button type="button" onclick="predictDiabetes()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                            Predict Now
+                        </button>
+                    </div>
+                </form>
+
+                <div id="result" class="hidden mt-6 p-4 bg-gray-700 rounded-md shadow-md">
+                    <h3 class="text-xl font-bold mb-2">Prediction Result</h3>
+                    <p class="text-gray-400">Predicted Class: <span id="prediction"></span></p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer class="bg-gray-800 p-4">
+            <div class="container mx-auto text-center text-gray-400">
+                © 2023 Disease Prediction Dashboard. All rights reserved.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        async function predictDiabetes() {
+            const apiUrl = "/predict"; // Update this to your actual prediction endpoint
+
+            const data = {
+                age: parseInt(document.getElementById("age").value),
+                glucose: parseFloat(document.getElementById("glucose").value),
+                blood_pressure: parseFloat(document.getElementById("blood_pressure").value),
+                bmi: parseFloat(document.getElementById("bmi").value)
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch prediction");
+                }
+
+                const result = await response.json();
+                if (result.prediction) {
+                    document.getElementById("result").classList.remove("hidden");
+                    document.getElementById("prediction").innerText = result.prediction;
+                } else {
+                    alert("Error: No prediction received.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Error fetching prediction. Please try again.");
+            }
+        }
+    </script>
+</body>
+</html>
