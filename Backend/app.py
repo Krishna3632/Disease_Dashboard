@@ -7,10 +7,11 @@ import sklearn
 import numpy as np
 
 app = Flask(__name__)
-dib=joblib.load("Diabetes_Pred.pkl")
+
 @app.route('/pred', methods=['POST'])
 def predict_diabetes():
     # Get JSON data from the request
+    dib=joblib.load("Diabetes_Pred.pkl")
     data = request.get_json()
 
     # Extracting the required fields
