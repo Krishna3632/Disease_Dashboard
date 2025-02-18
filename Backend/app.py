@@ -18,7 +18,7 @@ def predict_diabetes():
     age = data.get('age')
     bmi = data.get('bmi')
     glucose = data.get('glucose')
-    bloodpressure = data.get('bloodpressure')
+    blood_pressure = data.get('blood_pressure')
 
     # Check for missing data
     if age is None or bmi is None or glucose is None or bloodpressure is None:
@@ -34,7 +34,7 @@ def predict_diabetes():
         return jsonify({'error': 'Invalid data type, expected numbers'}), 400
 
     # Prepare input data for prediction
-    input_data = np.array([[age, bmi, glucose, bloodpressure]])
+    input_data = np.array([[age, bmi, glucose, blood_pressure]])
 
     # Make prediction
     try:
